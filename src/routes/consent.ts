@@ -41,8 +41,9 @@ router.get('/', csrfProtection, (req, res, next) => {
             grant_scope: body.requested_scope,
 
             // ORY Hydra checks if requested audiences are allowed by the client, so we can simply echo this.
-            grant_access_token_audience: body.requested_access_token_audience,
-
+            //grant_access_token_audience: body.requested_access_token_audience,
+            grant_access_token_audience: [process.env.HYDRA_AUDIENCE || ""],
+            
             // The session allows us to set session data for id and access tokens
             session: {
               // This data will be available when introspecting the token. Try to avoid sensitive information here,
@@ -144,8 +145,9 @@ router.post('/', csrfProtection, (req, res, next) => {
           session: oidcConformityMaybeFakeSession(grantScope, body, session),
 
           // ORY Hydra checks if requested audiences are allowed by the client, so we can simply echo this.
-          grant_access_token_audience: body.requested_access_token_audience,
-
+          //grant_access_token_audience: body.requested_access_token_audience,
+          grant_access_token_audience: [process.env.HYDRA_AUDIENCE || ""],
+          
           // This tells hydra to remember this consent request and allow the same client to request the same
           // scopes from the same user, without showing the UI, in the future.
           remember: Boolean(req.body.remember),
